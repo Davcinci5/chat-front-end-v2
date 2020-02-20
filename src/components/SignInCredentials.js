@@ -1,0 +1,64 @@
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
+
+import { SIGNIN_MUTATION } from '../schema/mutations';
+import { CURRENT_USER_QUERY } from '../schema/queries';
+
+import PasswordComponent from './PasswordComponent';
+import EmailComponent from './EmailComponent';
+
+const SignInCredentials = () =>{
+//Hooks 
+const [email,setEmail] = useState("");
+const [password,setPassword] = useState("");
+const [error,setError] = useState({});
+
+const [login] = useMutation(
+    SIGNIN_MUTATION,
+    {
+        update:(cache, { data:{ login }})=>{
+            cache.writeQuery({
+                query: CURRENT_USER_QUERY,
+                data: { currentUser: login.user },
+            })
+        }
+    }
+);
+
+const handlePasswordChange = (e) =>{
+    setPassword(e.target.value);
+}
+
+const handleEmailChange = (e) =>{
+    setEmail(e.target.value);
+}
+
+const handleSubmit = (e) =>{
+    e.preventDefault();
+
+    let user = {
+        email:email,
+        password:password
+    }
+    login({variables:user})
+    .catch((e)=>{
+        setError({server:e.toString().split(":")[2]});
+    });
+}
+
+return(
+    <form>
+        <h3>Sign In</h3>
+        {error.email && <span>{error.email}</span>}<br/>
+        <EmailComponent email={email} handleEmailChange={handleEmailChange}/><br/>
+       {error.password && <span>{error.password}</span>}<br/>
+       <PasswordComponent value={password} handlePassword = {handlePasswordChange}/><br/>
+        {error.server && <span>{error.server}</span>}<br/>
+       <input type="button" onClick={handleSubmit} value="Submit"/> 
+    </form>
+);
+
+
+};
+
+export default SignInCredentials;
