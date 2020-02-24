@@ -13,6 +13,7 @@ const ChatComponent = ({email, fullName, receiver,socket}) =>{
     });
 
     socket.on("receiveHistorial",({messages})=>{
+console.log("entro receive historial");
 
         setDisplay(messages.map(msg=>({
             createdAt:msg.createdAt,
@@ -30,11 +31,14 @@ const ChatComponent = ({email, fullName, receiver,socket}) =>{
     
     const handleSubmit = e =>{
         e.preventDefault();
-        socket.emit('say', {  
+        const message =  {  
             from: fullName,   
             text: typedMsg,
             to:receiver 
-        });
+        }
+        socket.emit('say',message);
+        console.log("then i see",message);
+        
          setMessage("");
     }
     

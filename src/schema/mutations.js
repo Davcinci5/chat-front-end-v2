@@ -129,6 +129,14 @@ export const SIGNUP_MUTATION = gql`
           fullName
           email
         }
+        groups{
+          id,
+          name,
+          participants{
+            id,
+            fullName
+          }
+        }
       }
     }
   }

@@ -7,20 +7,22 @@ import FormGroup from './FormGroup';
 import Chat from '../ChatComponent';
 import ListComponent from './ListComponent';
 
+const  socket = openSocket('/'); 
+    
+socket.on('connect',() => {
+    console.log('Connected to server'); 
+});
+
+socket.on('disconnect', () => {
+      console.log('Disconnected from server'); 
+});
+
 const GroupWrapper = ({listFriends,listGroups,email,fullName}) =>{
     //Hooks
     const [groups,setGroups] = useState(listGroups);
     const [receiver,setReceiver] = useState("");
    
-    const  socket = openSocket('/'); 
-    
-    socket.on('connect',() => {
-        console.log('Connected to server'); 
-    });
-    
-    socket.on('disconnect', () => {
-          console.log('Disconnected from server'); 
-    });
+
 
    
     const handleSetReceiver = (e) => {

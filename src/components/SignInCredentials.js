@@ -25,6 +25,14 @@ const [login] = useMutation(
     }
 );
 
+///F.P Methods
+// Object ready to be sent to the server and verify 
+// if user exists 
+const createObjectUser = (email,password) =>{
+    return {email,password}
+}
+
+
 const handlePasswordChange = (e) =>{
     setPassword(e.target.value);
 }
@@ -35,15 +43,11 @@ const handleEmailChange = (e) =>{
 
 const handleSubmit = (e) =>{
     e.preventDefault();
-
-    let user = {
-        email:email,
-        password:password
-    }
-    login({variables:user})
-    .catch((e)=>{
-        setError({server:e.toString().split(":")[2]});
-    });
+    let user = createObjectUser(email,password);
+    login({variables:user}).
+        catch((e)=>{
+            setError({server:e.toString().split(":")[2]});
+        });
 }
 
 return(

@@ -9,6 +9,7 @@ import GenderComponent from './GenderComponent';
 import PasswordComponent from './PasswordComponent';
 import EmailComponent from './EmailComponent';
 import FullNameComponent from './FullNameComponent';
+import moment from 'moment';
 
 
 const SignupWithCredentials = () => {
@@ -53,8 +54,8 @@ const SignupWithCredentials = () => {
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-    const fullNameregex = /[,;:\.<>\(\)\^0-9\{\}\[\]\-\\_!@#$%&\+\-=]/;
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const fullNameregex = /[,;:<>0-9\-_!@#$%&\-=]/;
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let errors = {};
 
     if(fullNameregex.test(fullName)||fullName.length === 0){
@@ -75,15 +76,10 @@ const SignupWithCredentials = () => {
     }
 
     //validating date
-    let date = new Date(birthDay);
-    let isSameMonth = date.getMonth()+1 == birthDay.split(" ")[1];
-  
-    
-    
-    if(date=== "Invalid Date" || !isSameMonth){
+    let date = moment(birthDay,"YYYY MM DD");
+   
+    if(!date.isValid()){
       errors.birthday = "Invalid Date, please verify birthday";
-    }else{
-      date.toDateString();
     }
 
     let lenghtErrors = Object.keys(errors).length;
@@ -100,11 +96,7 @@ const SignupWithCredentials = () => {
         password:pass
       }
 
-      setError(errors);
-      
-      //const { error } = signup({ variables: user });
       signup({ variables: user })
-      .then()
       .catch((e)=>{
           setError({server:e.toString().split(":")[2]});
       }); 
