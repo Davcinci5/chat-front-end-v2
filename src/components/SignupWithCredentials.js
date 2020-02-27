@@ -11,6 +11,10 @@ import EmailComponent from './EmailComponent';
 import FullNameComponent from './FullNameComponent';
 import moment from 'moment';
 
+//INTERNATIONALIZATION
+import translate from '../i18n/translate';
+import { useIntl } from 'react-intl';
+
 
 const SignupWithCredentials = () => {
   //Hooks
@@ -59,27 +63,27 @@ const SignupWithCredentials = () => {
     let errors = {};
 
     if(fullNameregex.test(fullName)||fullName.length === 0){
-      errors.fullName = "Full name only contains letters";
+      errors.fullName = "fullNameError";
       setFullName("");
     }
 
     if(!emailRegex.test(email)){
-      errors.email = "Email Format Invalid";
+      errors.email = "emailError";
     }
 
     if(pass.length === 0){
-      errors.password = "Enter a password";
+      errors.password = "passwordError";
     }
 
     if(gender === ""){
-      errors.gender = "Select a gender"
+      errors.gender = "genderError";
     }
 
     //validating date
     let date = moment(birthDay,"YYYY MM DD");
    
     if(!date.isValid()){
-      errors.birthday = "Invalid Date, please verify birthday";
+      errors.birthday = "birthdayError";
     }
 
     let lenghtErrors = Object.keys(errors).length;
@@ -105,19 +109,19 @@ const SignupWithCredentials = () => {
 
   return( 
     <form>
-      <h3>Sign Up</h3>
-      {error.fullName && <span>{error.fullName}</span>}<br/>
+      <h3>{translate("createAccount")}</h3>
+      {error.fullName && <span>{translate(error.fullName)}</span>}<br/>
       <FullNameComponent value={fullName} handleNameChange={handleNameChange}/><br/>
-       {error.email && <span>{error.email}</span>}<br/>
+       {error.email && <span>{translate(error.email)}</span>}<br/>
        <EmailComponent email={email} handleEmailChange={handleEmailChange}/><br/>
-       {error.password && <span>{error.password}</span>}<br/>
+       {error.password && <span>{translate(error.password)}</span>}<br/>
        <PasswordComponent value={pass} handlePassword = {handlePassChange}/><br/>
-       {error.gender && <span>{error.gender}</span>}<br/>
+       {error.gender && <span>{translate(error.gender)}</span>}<br/>
         <GenderComponent handleRadio = {handleRadio}/>
-        {error.birthday && <span>{error.birthday}</span>}<br/>
+        {error.birthday && <span>{translate(error.birthday)}</span>}<br/>
         <BirthdayComponent birthDayHandler={handleBirthday}/>
         {error.server && <span>{error.server}</span>}<br/>
-        <input type="button" onClick={handleSubmit} value="Submit"/> 
+        <input type="button" onClick={handleSubmit} value={useIntl().formatMessage({id:"createAccount"})}/> 
     </form>
   );
 };

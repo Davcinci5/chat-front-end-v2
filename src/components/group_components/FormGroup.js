@@ -1,7 +1,10 @@
 import React,{useState, useEffect} from 'react';
 import ParticipantSelector from './ParticipantSelectorComponent';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATEGROUP_MUTATION } from '../../schema/mutations'
+import { CREATEGROUP_MUTATION } from '../../schema/mutations';
+
+import translate from '../../i18n/translate';
+
 
 
 const FormGroup = ({listFriends,groups,setGroups}) =>{
@@ -75,25 +78,25 @@ const FormGroup = ({listFriends,groups,setGroups}) =>{
 
     return(
         <div>
-            Create Group
+            {translate("createGroup")}
             <br/>
             <label>
-                Name: 
+                {translate("name")}: 
                 <input name="group" value={name} type="text" onChange={handlerNameGroup} placeholder="Group Name"/> 
             </label>
             <div>
-                Friends:
+                {translate("listFriends")}:
                 <ul>
                 {getListFriends()}
                 </ul>
             </div>
             <div>
-                Participants:
+                {translate("members")}:
                 <ul>
                 {getListParticipants()}
                 </ul>
             </div>
-            <button onClick={handlerCreateGroup}>Create Group</button>
+            <button onClick={handlerCreateGroup}>{translate("createGroup")}</button>
         </div>
     );
 };

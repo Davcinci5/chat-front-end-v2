@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import translate from '../i18n/translate';
+import { useIntl } from 'react-intl';
 
 const BirthdayComponent = (props) =>{
     const [day,setDay] = useState("Day");
@@ -23,9 +25,9 @@ const BirthdayComponent = (props) =>{
 
     return(
         <div>
-            <label>BirthDay</label><br/>
+            <label>{translate("birthday")}</label><br/>
         <select value={day} onChange={handleSelectDay}>
-            <option value="Day">Day</option>
+            <option value="Day">{useIntl().formatMessage({id:"day"})}</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -59,7 +61,7 @@ const BirthdayComponent = (props) =>{
             <option value="31">31</option>
         </select>
         <select value={month} onChange={handleSelectMonth}>
-        <option value="Month">Month</option>
+        <option value="Month">{useIntl().formatMessage({id:"month"})}</option>
         <option value="1">Jan</option>
         <option value="2">Feb</option>
         <option value="3">Mar</option>
@@ -74,7 +76,7 @@ const BirthdayComponent = (props) =>{
         <option value="12">Dec</option>
         </select> 
         <select value={year} onChange={handleSelectYear}>
-            <option value="Year">Year</option>
+            <option value="Year">{useIntl().formatMessage({id:"year"})}</option>
             <option value="2019">2019</option>
             <option value="2018">2018</option>
             <option value="2017">2017</option>

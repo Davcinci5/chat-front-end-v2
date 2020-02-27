@@ -6,6 +6,11 @@ import { CURRENT_USER_QUERY } from '../schema/queries';
 
 import PasswordComponent from './PasswordComponent';
 import EmailComponent from './EmailComponent';
+ 
+
+import translate from '../i18n/translate';
+import { useIntl } from 'react-intl';
+
 
 const SignInCredentials = () =>{
 //Hooks 
@@ -51,15 +56,18 @@ const handleSubmit = (e) =>{
 }
 
 return(
+    <>
     <form>
-        <h3>Sign In</h3>
+     <h3>{translate("login")}</h3>
         {error.email && <span>{error.email}</span>}<br/>
-        <EmailComponent email={email} handleEmailChange={handleEmailChange}/><br/>
+        <EmailComponent email={email} placeholder={translate("email")} handleEmailChange={handleEmailChange}/><br/>
        {error.password && <span>{error.password}</span>}<br/>
        <PasswordComponent value={password} handlePassword = {handlePasswordChange}/><br/>
         {error.server && <span>{error.server}</span>}<br/>
-       <input type="button" onClick={handleSubmit} value="Submit"/> 
+       <input type="button" onClick={handleSubmit} value={useIntl().formatMessage({id:"login"})}/> 
     </form>
+    </>
+    
 );
 
 

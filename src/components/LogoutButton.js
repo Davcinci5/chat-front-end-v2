@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import { CURRENT_USER_QUERY } from '../schema/queries';
 import { LOGOUT_MUTATION } from '../schema/mutations';
+import translate from '../i18n/translate'
 
 const LogoutButton = () => {
   const [logout] = useMutation(
@@ -17,7 +18,7 @@ const LogoutButton = () => {
 
   return (
     <button onClick={logout}>
-      Logout
+      {translate("logout")}
     </button>
   );
 };

@@ -1,4 +1,5 @@
-import React,{useState} from 'react';
+import React from 'react';
+import translate from '../../i18n/translate';
 
 const ParticipantSelector = ({id,fullName,handler,title}) =>{
      
@@ -10,7 +11,7 @@ const ParticipantSelector = ({id,fullName,handler,title}) =>{
         <li key={id}>
              {fullName}
              <button onClick={handlerGroup}>
-               {title}
+               {translate(title)}
               </button>
         </li>
     );
