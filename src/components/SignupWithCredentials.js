@@ -4,19 +4,56 @@ import { useMutation } from '@apollo/react-hooks';
 import { CURRENT_USER_QUERY } from '../schema/queries';
 import { SIGNUP_MUTATION } from '../schema/mutations';
 
-import BirthdayComponent from './BirthdayComponent';
-import GenderComponent from './GenderComponent';
-import PasswordComponent from './PasswordComponent';
-import EmailComponent from './EmailComponent';
-import FullNameComponent from './FullNameComponent';
+import BirthdayComponent from './LoginAndSignUp/BirthdayComponent';
+import GenderComponent from './LoginAndSignUp/GenderComponent';
+import PasswordComponent from './LoginAndSignUp/PasswordComponent';
+import EmailComponent from './LoginAndSignUp/EmailComponent';
+import FullNameComponent from './LoginAndSignUp/FullNameComponent';
 import moment from 'moment';
+
+//react router
+import { withRouter } from 'react-router-dom';
 
 //INTERNATIONALIZATION
 import translate from '../i18n/translate';
-import { useIntl } from 'react-intl';
+
+///css
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+import Grid from '@material-ui/core/Grid';
+
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(5),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    
+  },
+}));
 
 
-const SignupWithCredentials = () => {
+const SignupWithCredentials = (props) => {
+  //css
+  const classes = useStyles();
   //Hooks
   const [fullName,setFullName] = useState("");
   const [birthDay,setBirthday] = useState("");
@@ -101,6 +138,7 @@ const SignupWithCredentials = () => {
       }
 
       signup({ variables: user })
+      .then(()=>props.history.push('/dashboard'))
       .catch((e)=>{
           setError({server:e.toString().split(":")[2]});
       }); 
@@ -108,22 +146,47 @@ const SignupWithCredentials = () => {
   }
 
   return( 
-    <form>
-      <h3>{translate("createAccount")}</h3>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+      <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+        {translate("createAccount")}
+        </Typography>
+      <form >
+      <Grid container
+  direction="row"
+  justify="space-between"
+  alignItems="flex-end" >
+      <Grid  item xs={12} >
       {error.fullName && <span>{translate(error.fullName)}</span>}<br/>
       <FullNameComponent value={fullName} handleNameChange={handleNameChange}/><br/>
+      </Grid>
+       <Grid  item xs={12} >
        {error.email && <span>{translate(error.email)}</span>}<br/>
        <EmailComponent email={email} handleEmailChange={handleEmailChange}/><br/>
+       </Grid>
+       <Grid  item xs={12} >
        {error.password && <span>{translate(error.password)}</span>}<br/>
        <PasswordComponent value={pass} handlePassword = {handlePassChange}/><br/>
+       </Grid>
+       <Grid  item xs={12} >
        {error.gender && <span>{translate(error.gender)}</span>}<br/>
-        <GenderComponent handleRadio = {handleRadio}/>
+        <GenderComponent gender={gender} handleRadio = {handleRadio}/>
+        </Grid>
+        <Grid  item xs={12}>
         {error.birthday && <span>{translate(error.birthday)}</span>}<br/>
         <BirthdayComponent birthDayHandler={handleBirthday}/>
         {error.server && <span>{error.server}</span>}<br/>
-        <input type="button" onClick={handleSubmit} value={useIntl().formatMessage({id:"createAccount"})}/> 
-    </form>
+        </Grid>
+        </Grid>
+        <Button variant="contained" color="primary" onClick={handleSubmit} disableElevation>{translate("createAccount")}</Button> 
+      </form>
+      </div>
+      </Container>
   );
 };
 
-export default SignupWithCredentials;
+export default withRouter(SignupWithCredentials);

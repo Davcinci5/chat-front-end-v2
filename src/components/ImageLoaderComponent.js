@@ -25,10 +25,10 @@ const ImageLoaderComponent = ({src}) => {
     }
 
 return(
-    <>
-     <ShowImageComponent src={imagesrc} height="100" width="100"/><br/>
+    <React.Fragment>
+     <ShowImageComponent src={imagesrc} height="185" width="210"/><br/>
     <input type="file" onChange={showFile} accept="image/*"/><br/>
-    </>
+    </React.Fragment>
 );
 }
 

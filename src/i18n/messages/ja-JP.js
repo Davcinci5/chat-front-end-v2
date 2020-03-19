@@ -23,8 +23,7 @@ export default {
         'logout':'ログアウト',
         'happyBirthday':'誕生日おめでとう',
         'tomorrowIs':'明日は',
-        'sbirthday':'お誕生日です',
-        'daysbirthday':'日で誕生日です',
+        'daysbirthday':'{days}日で誕生日です',
         'age':'年齢',
         'nameOremail':'メールアドレスまたは姓名',
         'search':'検索',
@@ -41,6 +40,9 @@ export default {
         'name':'名前',
         'members':'メンバー',
         'add':'追加',
-        'remove':'削除'
+        'remove':'削除',
+        'profile':' プロフィール ',
+        'dashboard':' ダッシュボード ',
+        'setting':' セッティング '
     }  
 }

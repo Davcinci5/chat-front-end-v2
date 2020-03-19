@@ -1,15 +1,42 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState} from 'react';
 import ParticipantSelector from './ParticipantSelectorComponent';
 import { useMutation } from '@apollo/react-hooks';
 import { CREATEGROUP_MUTATION } from '../../schema/mutations';
 
 import translate from '../../i18n/translate';
 
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import Container from '@material-ui/core/Container';
+import List from '@material-ui/core/List';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+
+const useStyles = makeStyles(theme => ({
+    paper: {
+      width:'210px',
+      height:'20vh'
+    },
+    list: {
+   
+      maxHeight:'100%',
+      overflow:'auto'
+    },
+}
+))
+
 
 
 const FormGroup = ({listFriends,groups,setGroups}) =>{
+
     const [name,setName] = useState("");
     const [participants,setParticipants] =  useState([]);
+    //css classes
+    const classes = useStyles();
 
     //apollo Hooks
     const [createGrop] = useMutation(CREATEGROUP_MUTATION);
@@ -18,7 +45,7 @@ const FormGroup = ({listFriends,groups,setGroups}) =>{
     const removeParticipant = (idPart) => {
         setParticipants(participants.filter(p=>p !== idPart));
     }
-
+  
     const addParticipant = (idPart) => {
         let exist = participants.find(p=>p === idPart);
         if(!exist) setParticipants([...participants,idPart])
@@ -76,28 +103,42 @@ const FormGroup = ({listFriends,groups,setGroups}) =>{
         clearListFriends();
     }
 
-    return(
-        <div>
+    return( 
+        <Container>
             {translate("createGroup")}
             <br/>
-            <label>
-                {translate("name")}: 
-                <input name="group" value={name} type="text" onChange={handlerNameGroup} placeholder="Group Name"/> 
-            </label>
-            <div>
+            <FormControl >
+            <InputLabel >{translate("name")}</InputLabel>
+            <Input 
+                id="standard-adornment-group"
+                type="text"
+                name="group" 
+                value={name} 
+                onChange={handlerNameGroup}
+              />
+             </FormControl>  
+             <br/>
+            <FormControl>
                 {translate("listFriends")}:
-                <ul>
-                {getListFriends()}
-                </ul>
-            </div>
-            <div>
+                <Paper  className={classes.paper}>
+                    <List className={classes.list}>
+                    {getListFriends()}
+                    </List>
+                </Paper>
+            </FormControl>
+            <br/>
+            <FormControl>
                 {translate("members")}:
-                <ul>
-                {getListParticipants()}
-                </ul>
-            </div>
-            <button onClick={handlerCreateGroup}>{translate("createGroup")}</button>
-        </div>
+                <Paper className={classes.paper}>
+                    <List className={classes.list}>
+                    {getListParticipants()}
+                    </List>
+                </Paper>
+            </FormControl>
+            <br/>
+            <Button  color="primary" onClick={handlerCreateGroup}>{translate("createGroup")}</Button>
+           
+        </Container>
     );
 };
 

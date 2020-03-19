@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { SIGNIN_MUTATION } from '../schema/mutations';
-import { CURRENT_USER_QUERY } from '../schema/queries';
+ import { SIGNIN_MUTATION } from '../schema/mutations';
+ import { CURRENT_USER_QUERY } from '../schema/queries';
 
-import PasswordComponent from './PasswordComponent';
-import EmailComponent from './EmailComponent';
- 
+import PasswordComponent from './LoginAndSignUp/PasswordComponent';
+import EmailComponent from './LoginAndSignUp/EmailComponent';
 
+//react router
+import { withRouter } from 'react-router-dom';
+
+//internationalization
 import translate from '../i18n/translate';
-import { useIntl } from 'react-intl';
 
 
-const SignInCredentials = () =>{
+///css
+import { Button} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        marginLeft: theme.spacing(60),
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+  }));
+
+const SignInCredentials = (props) =>{
+//css
+const classes = useStyles();
+
 //Hooks 
 const [email,setEmail] = useState("");
 const [password,setPassword] = useState("");
@@ -45,32 +64,41 @@ const handlePasswordChange = (e) =>{
 const handleEmailChange = (e) =>{
     setEmail(e.target.value);
 }
-
+ 
 const handleSubmit = (e) =>{
     e.preventDefault();
     let user = createObjectUser(email,password);
-    login({variables:user}).
-        catch((e)=>{
+    login({variables:user})
+    .then(()=>props.history.push('/dashboard'))
+    .catch((e)=>{
             setError({server:e.toString().split(":")[2]});
         });
 }
 
+const { loading,  data } = useQuery(CURRENT_USER_QUERY);
+if (loading) return <div>Loading</div>;
+const isLoggedIn = !!data.currentUser;
+if(isLoggedIn){
+    props.history.push('/dashboard');
+}
+
+
+
+
 return(
-    <>
-    <form>
-     <h3>{translate("login")}</h3>
-        {error.email && <span>{error.email}</span>}<br/>
+    <Container component="main" maxWidth="ls">
+    <div className={classes.root}>
         <EmailComponent email={email} placeholder={translate("email")} handleEmailChange={handleEmailChange}/><br/>
-       {error.password && <span>{error.password}</span>}<br/>
        <PasswordComponent value={password} handlePassword = {handlePasswordChange}/><br/>
         {error.server && <span>{error.server}</span>}<br/>
-       <input type="button" onClick={handleSubmit} value={useIntl().formatMessage({id:"login"})}/> 
-    </form>
-    </>
+        <Button type="submit"  variant="contained" color="primary" onClick={handleSubmit} disableElevation>{translate("login")}</Button> 
+    </div>
+   
+    </Container>
     
 );
 
 
 };
 
-export default SignInCredentials;
+export default withRouter(SignInCredentials);

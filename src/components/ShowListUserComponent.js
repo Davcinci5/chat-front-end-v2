@@ -9,31 +9,35 @@ import { useMutation } from '@apollo/react-hooks';
 
     
 const ShowListUserComponent = ({user, reqSent, reqReceived,friendsList}) => {
+    
+    const findUserInlist = (function({id}){return function(list){return list.some(friend => friend.id === id)}})(user);
+    
+    function getCuurenSTate(){
+        let userInReqRec = findUserInlist(reqReceived); //return true if user exists in request received
+        if(userInReqRec){
+            return "accept request";
+        }else{
+            let userInReqSent = findUserInlist(reqSent);
+            if(userInReqSent){
+                return "cancel request";
+            }else{
+                let userInFriends = findUserInlist(friendsList);
+                if(userInFriends){
+                    return "delete friend";
+                }else{
+                    return "send request";
+                }
+            }
+        }    
+    }
+
 // hook 
-const [stateReq,setStateReq] = useState("");
+const [stateReq,setStateReq] = useState(getCuurenSTate());
 const [request] =  useMutation(FRIEND_REQUEST);
 
-const findUserInlist = (function({id}){return function(list){return list.some(friend => friend.id === id)}})(user);
 
 
-useEffect(()=>{
-    let userInReqRec = findUserInlist(reqReceived); //return true if user exists in request received
-    if(userInReqRec){
-        setStateReq("accept request");
-    }else{
-        let userInReqSent = findUserInlist(reqSent);
-        if(userInReqSent){
-            setStateReq("cancel request");
-        }else{
-            let userInFriends = findUserInlist(friendsList);
-            if(userInFriends){
-                setStateReq("delete friend");
-            }else{
-                setStateReq("send request");
-            }
-        }
-    }    
-});
+
  
    const testF = async(e) =>{
        let id = e.target.parentNode.id; 

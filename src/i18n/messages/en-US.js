@@ -21,10 +21,9 @@ export default {
         'genderError':'Select a gender',
         'birthdayError':'Invalid Date, please verify birthday',
         'logout':'Log out',
-        'happyBirthday':'HAPPY BIRTHDAY IT IS TODAY',
-        'tomorrowIs':'Tomorrow is ',
-        'sbirthday':"'s birthday",
-        'daysbirthday':' days for Birthday',
+        'happyBirthday':'HAPPY BIRTHDAY',
+        'tomorrowIs':'Tomorrow',
+        'daysbirthday':'Birthday in {days} days',
         'age':'Age',
         'nameOremail':'by name or email',
         'search':'Search',
@@ -41,6 +40,9 @@ export default {
         'name':'Name',
         'members':'Members',
         'add':'Add',
-        'remove':'Remove'
+        'remove':'Remove',
+        'profile':'Profile',
+        'dashboard':'Dashboard',
+        'setting':'Setting'
     }
 }
