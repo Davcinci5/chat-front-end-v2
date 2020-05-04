@@ -43,6 +43,9 @@ export default {
         'remove':'削除',
         'profile':' プロフィール ',
         'dashboard':' ダッシュボード ',
-        'setting':' セッティング '
+        'setting':' セッティング ',
+        'addFriend':'友達になる',
+        'close': '閉じる',
+        'friendReq':'友達リクエスト '
     }  
 }

@@ -1,8 +1,7 @@
 import React from "react";
 import {
   Switch,
-  Route,
-  Redirect,
+  Route
 } from "react-router-dom";
 
 
@@ -12,6 +11,10 @@ import SignupWithCredentials from './components/SignupWithCredentials';
 import SignInCredentials from './components/SignInCredentials';
 import LogoutButton from './components/LogoutButton'; 
 import Dashboard from './components/Dashboard';
+// //socket
+// import openSocket from 'socket.io-client';
+ //import startSocket from './socketIO/socket';
+
 
 
 
@@ -27,6 +30,16 @@ const Routes = () => {
         )
     }
 
+    // const PreSetUPDashboard = () =>{
+    //       //open socket
+    //      const  socket = openSocket('/');
+    //      startSocket(socket);
+    //      return(<>
+    //         <Dashboard socket={socket}/>
+    //         <LogoutButton/>
+    //             </>)
+    // }
+
 
     return (
         <Switch>
@@ -40,8 +53,10 @@ const Routes = () => {
               <LoginAndSIgnUp/>
           </Route>
           <Route exact path="/dashboard">
-              <Dashboard/>
-              <LogoutButton/>
+                <>
+            <Dashboard />
+            <LogoutButton/>
+                </>
           </Route>
         </Switch>
     )

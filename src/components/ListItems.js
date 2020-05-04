@@ -17,11 +17,11 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Link } from '@material-ui/core';
-import clsx from 'clsx';
 
 //my component 
 import AddContactComponent from './AddContactComponent';
 import FormGroup from './group_components/FormGroup';
+import FriendRequest from './FriendRequest'
 
 export const MainListItems = ({fullName, birthday, gender,email}) => {
 
@@ -86,13 +86,12 @@ const useStyles = makeStyles(theme => ({
     margin:theme.spacing(3),
     height: '400',
   },
-}));
+})); 
 
 export const SecondaryListItems = (props) =>{
   const [addFriends, setModalFriendOpen] = React.useState(false);
   const [createGroup,setModalGroup] = React.useState(false);
-
-
+  const [requestF,setRequestF] = React.useState(false);
 
   const handleModalFriendOpen = (e) => {
     e.preventDefault();
@@ -110,6 +109,15 @@ export const SecondaryListItems = (props) =>{
 
   const handleModalGroupClose = () => {
     setModalGroup(false);
+  };
+
+  const handleModalReqOpen = (e) => {
+    e.preventDefault();
+    setRequestF(true);
+  };
+
+  const handleModalReqClose = () => {
+    setRequestF(false);
   };
   
 
@@ -130,7 +138,7 @@ export const SecondaryListItems = (props) =>{
         
     <div>
       <Link href="/" onClick={handleModalFriendOpen}>
-      <ListItemText primary="Add a friend" />
+      <ListItemText primary={translate("addFriend")} />
       </Link> 
         <Modal
             aria-labelledby="simple-modal-title"
@@ -140,36 +148,56 @@ export const SecondaryListItems = (props) =>{
           > 
             <div style={modalStyle} className={classes.paper} >
   
-            <AddContactComponent  sent={props.reqSent} received={props.reqReceived} friends={props.friendsList}/>
+            <AddContactComponent  sent={props.reqSent} received={props.reqReceived.val} friends={props.friendsList.val}/>
           
-            <Button variant="contained" color="primary" onClick={handleModalFriendClose}>Close</Button>
+            <Button variant="contained" color="primary" onClick={handleModalFriendClose}>{translate("close")}</Button>
             </div>
           </Modal>
             </div>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                  <GroupAddIcon />
-                </ListItemIcon>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+              <GroupAddIcon />
+            </ListItemIcon>
             <div>
-      <Link href="/" onClick={handleModalGroupOpen}>
-        <ListItemText primary="Create Group" />
-      </Link>
+            <Link href="/" onClick={handleModalGroupOpen}>
+              <ListItemText primary={translate("createGroup")} />
+            </Link>
+                <Modal
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
+                  open={createGroup}
+                > 
+                  <div style={modalStyle} className={classes.paper}>
+                  <FormGroup 
+                      listFriends={props.friendsList.val} 
+                      groups={props.groups} 
+                      setGroups={props.setGroups} 
+                  />
+                    <Button variant="contained" color="primary" onClick={handleModalGroupClose}>{translate("close")}</Button>
+                  </div>
+                </Modal>
+          </div>
+    </ListItem>
+    <ListItem>
+        <ListItemIcon>
+          <PersonAddIcon/>
+        </ListItemIcon>
+        <div>
+          <Link href="/" onClick={handleModalReqOpen}>
+            <ListItemText primary={translate("friendReq")} secondary={props.reqReceived.val.length}/>
+          </Link> 
           <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={createGroup}
-          > 
-            <div style={modalStyle} className={classes.paper}>
-            <FormGroup 
-                listFriends={props.friendsList} 
-                groups={props.groups} 
-                setGroups={props.setGroups} 
-            />
-              <Button variant="contained" color="primary" onClick={handleModalGroupClose}>Close</Button>
-            </div>
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
+                  open={requestF}
+                >
+              <div style={modalStyle} className={classes.paper}>
+              <FriendRequest reqReceived={props.reqReceived.val} setReqReceived={props.reqReceived.set} friendsList={props.friendsList.val} setFriendList={props.friendsList.set}/>
+              <Button variant="contained" color="primary" onClick={handleModalReqClose}>Close</Button>
+              </div> 
           </Modal>
-    </div>
+        </div>
     </ListItem>
   </>);
 }

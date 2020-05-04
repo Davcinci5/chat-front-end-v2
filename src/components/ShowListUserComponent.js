@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 
  
 import { FRIEND_REQUEST } from '../schema/mutations'
@@ -17,7 +17,7 @@ const ShowListUserComponent = ({user, reqSent, reqReceived,friendsList}) => {
         if(userInReqRec){
             return "accept request";
         }else{
-            let userInReqSent = findUserInlist(reqSent);
+            let userInReqSent = findUserInlist(reqSent.val);
             if(userInReqSent){
                 return "cancel request";
             }else{
@@ -39,14 +39,16 @@ const [request] =  useMutation(FRIEND_REQUEST);
 
 
  
-   const testF = async(e) =>{
+   const sendReq = async(e) =>{
        let id = e.target.parentNode.id; 
        try{
         
-       let {data} = await request({variables:{friendID:id}});
-       console.log(data.friendRequest);
-       
+       let {data} = await request({variables:{friendID:id}});       
             setStateReq(data.friendRequest);
+            if(data.friendRequest==="cancelRequest"){
+                console.log("entro cancel request");
+                reqSent.set([...reqSent.val,user]);
+            }
        }catch(e){
             console.log(e);
        }
@@ -58,7 +60,7 @@ const [request] =  useMutation(FRIEND_REQUEST);
                 <p>{user.fullName}</p>
                 <p>{user.email}</p>
                 <ShowImageComponent src={user.profileImg} height="50" width="50"/><br/>
-                <button onClick={testF} >{stateReq}</button>
+                <button onClick={sendReq} >{stateReq}</button>
              </div>
 
        </>

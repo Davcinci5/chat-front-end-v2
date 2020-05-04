@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 //react router
 import { withRouter,Redirect } from 'react-router-dom';
 import clsx from 'clsx';
-import translate from '../i18n/translate';
+import translate from '../i18n/translate'; 
 
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,10 +25,6 @@ import { MainListItems , SecondaryListItems } from './ListItems';//
 import { useQuery } from '@apollo/react-hooks';
 import { CURRENT_USER_QUERY } from '../schema/queries';
 
-//socket 
-import openSocket from 'socket.io-client';
-import startSocket from '../socketIO/socket';
-
 
 //my components
 import ImageLoaderComponent  from './ImageLoaderComponent'
@@ -38,6 +34,7 @@ import Chat from './Chat/ChatComponent';
 
 
 const drawerWidth = 240;
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -119,14 +116,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
 const Dashboard = (props) => {
+
+
     //hooks
     const [open, setOpen] = useState(true);
     const [allGroups,setGroups] = useState([]);
-    const [receiver,setReceiver] = useState("");
-    //open socket
-    const  socket = openSocket('/socket'); 
+    const [receiver,setReceiver] = useState({});
+    const [reqReceived,setReqReceived] = React.useState([]);
+    const [friendsList,setFriendsList] = React.useState([]);
+    const [reqSents,setReqSent] = React.useState([]);
+    
   
    const classes = useStyles();
 
@@ -136,8 +136,14 @@ const Dashboard = (props) => {
     useEffect(()=>{
       if(data && data.currentUser){
         setGroups(data.currentUser.groups);
+        setReqReceived(data.currentUser.reqReceived);
+        setFriendsList(data.currentUser.friendsList);
+        setReqSent(data.currentUser.reqSent);
       }
     },[data])
+
+
+
     if (loading) return <div>Loading</div>;
     if (error) return <div>Error: {JSON.stringify(error)}</div>;
     const isLoggedIn = !!data.currentUser;
@@ -146,26 +152,31 @@ const Dashboard = (props) => {
     const {
       birthday,
       email,
-      friendsList,
       fullName,
       gender,
       profileImg,
-      reqReceived,
-      reqSent
      } = data.currentUser;
 
-   
+const lookForMembers = (id) =>{
+      const isDGroup = g => g.id === id;
+      const onlyNamesPart = (ac,cv) =>`${ac} ${cv.fullName}`;
+      const participantObj = allGroups.find(isDGroup);
+      if(!participantObj) return;
+      return participantObj.participants.reduce(onlyNamesPart,"participants: ");
+      
+}
+const handleSetReceiver = (e) => {
+    e.preventDefault();  
+    const id = e.target.id;
+    const members = lookForMembers(id);
+    const name = e.target.innerText;
 
-  
-
-  
-
-  const handleSetReceiver = (e) => {
-    e.preventDefault();
-    const emailFriend = e.target.id;
-    const data = {from:email, to:emailFriend};
-    socket.emit('getHistorial',data,(data)=>{console.log(`Error ${data}`)});   
-    setReceiver(emailFriend);
+    const currentTalk = {id,name }
+    if(members) currentTalk.members = members;
+    if(id !== receiver.id){
+      setReceiver(currentTalk);
+    } 
+    
 }
 
   const handleDrawerOpen = () => {
@@ -176,14 +187,9 @@ const Dashboard = (props) => {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  
-
-
-
   return (
     <>
-
-    <div className={classes.root} onLoad={startSocket(socket)}>
+    <div className={classes.root} >
    
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -229,10 +235,10 @@ const Dashboard = (props) => {
         <Divider />
         <List>
         <SecondaryListItems 
-            friendsList={friendsList} 
-            reqSent={reqSent} 
-            reqReceived={reqReceived}
-            groups={allGroups}
+            friendsList={{"val":friendsList, "set":setFriendsList}} 
+            reqSent={{"val":reqSents, "set":setReqSent}} 
+            reqReceived={{"val":reqReceived,"set":setReqReceived}}
+            groups={allGroups} 
             setGroups={setGroups}
             />
         </List>
@@ -243,14 +249,20 @@ const Dashboard = (props) => {
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
-              <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                {translate("chat")}
+              <Typography component="h2" variant="h4" color="primary" gutterBottom>
+                {receiver.name ? receiver.name : translate("chat")}
+                {receiver.members && <Typography variant="subtitle1" color="primary" gutterBottom>
+                                      {receiver.members}
+                                   </Typography>}
               </Typography>
+              
                 <Chat 
-                email={email} 
-                fullName={fullName} 
-                receiver={receiver}
-                socket ={socket}
+                  email={email} 
+                  receiver={receiver}
+                  friendsList={{"val":friendsList, "set":setFriendsList}}
+                  reqReceived={{"val":reqReceived,"set":setReqReceived}}
+                  reqSent={{"val":reqSents, "set":setReqSent}} 
+                  group={{"val":allGroups,"set":setGroups}}
                 />
         
             </Grid>

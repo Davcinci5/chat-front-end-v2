@@ -1,14 +1,9 @@
-function applyMethodSocket(socket){
-    socket.on('connect',() => {
-        console.log('Connected to server'); 
-    });
-    
-    socket.on('disconnect', () => {
-          console.log('Disconnected from server'); 
-    });
-    
+import io from 'socket.io-client'
+
+const startSocket = () =>{
+    const socket = io.connect('/');
     return socket;
-}
+} 
 
 
-export default applyMethodSocket;
+export default startSocket;

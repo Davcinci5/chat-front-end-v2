@@ -62,7 +62,7 @@ const AddContact = ({sent,received,friends}) => {
                 {usersFound && usersFound.map(user => (
                     <ShowListUser  key={user.id} user={user} reqSent={sent} reqReceived={received} friendsList={friends} />
                 ))}
-            </List>
+            </List> 
             </Paper>      
         </div>
     );

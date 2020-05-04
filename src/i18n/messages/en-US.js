@@ -43,6 +43,9 @@ export default {
         'remove':'Remove',
         'profile':'Profile',
         'dashboard':'Dashboard',
-        'setting':'Setting'
+        'setting':'Setting',
+        'addFriend':'Add Friend',
+        'close': 'Close',
+        'friendReq':"Friends' request"
     }
 }

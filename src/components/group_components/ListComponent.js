@@ -49,7 +49,7 @@ const ListComponent = ({handler,groups,friends}) =>{
                 >{element.name}</Link>
             </ListItem>
         )))
-      
+       
     
     
     return(<div>

@@ -141,3 +141,32 @@ export const SIGNUP_MUTATION = gql`
     }
   }
 `;
+export const GETDATOS = gql`
+  mutation Getdatos{
+    getDatos{
+      friendsList{
+        id
+        fullName
+        email
+      }
+      reqSent{
+        id
+        fullName
+        email
+      }
+      reqReceived{ 
+        id
+        fullName
+        email
+      }
+      groups{
+        id,
+        name,
+        participants{
+          id,
+          fullName
+        }
+      }
+    }
+  }
+`;

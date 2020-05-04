@@ -9,7 +9,8 @@ import Routes from './Routes';
 //internationalization 
 import {I18nProvider, LOCALES} from './i18n';
 
-import { CURRENT_USER_QUERY } from './schema/queries';
+
+ 
 
 //css 
 import Button from '@material-ui/core/Button';
@@ -36,7 +37,7 @@ const Internationalization = props =>{
       <div className={classes.root}>
       <ButtonGroup variant="text" color="primary" aria-label="text primary button group">
         <Button onClick={()=>setLocal(LOCALES.ENGLISH)}>ENGLISH</Button>
-        <Button onClick={()=>setLocal(LOCALES.GERMAN)}>GERMAN</Button>
+        <Button onClick={()=>setLocal(LOCALES.GERMAN)}>SPANISH</Button>
         <Button onClick={()=>setLocal(LOCALES.JAPANESE)}>JAPANESE</Button>
       </ButtonGroup>
       </div>
@@ -44,13 +45,7 @@ const Internationalization = props =>{
     )
   }
 
-const App = () => {   
-  // const { loading, error, data } = useQuery(CURRENT_USER_QUERY);
-
-  //   if (loading) return <div>Loading</div>;
-  //   if (error) return <div>Error: {JSON.stringify(error)}</div>;
-  //     var isLoggedIn = !!data.currentUser;
-    
+const App = () => {      
     return (
       <Router>
         <Internationalization >

@@ -1,5 +1,5 @@
- import React,{useState} from 'react';
- import { Paper, Button, Icon, Grid, Box, TextField, makeStyles} from '@material-ui/core';
+ import React from 'react';
+ import { Paper, Button, Grid, Box, TextField, makeStyles} from '@material-ui/core';
  import translate from '../../i18n/translate';
  import MenuIcon from '@material-ui/icons/Menu';
  
